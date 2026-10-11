@@ -1,0 +1,7 @@
+SDL3 Base Project Rev 2
+
+Note to Future:
+
+Rework window system so that texture and window presentation are not constantly redrawn but are
+only redrawn if there was a update the visuals. Thatway there is less overheating on Laptops if the
+programm runns Longer than two minuts.

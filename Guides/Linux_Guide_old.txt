@@ -1,0 +1,197 @@
+This file contains information on how to install and use the SDL libuarys for this project
+so that the development enviurment can be replicated on other systems
+Written for Linux defualt Debian 12
+
+Table of contents:
+1. Installation of SDL3
+2. Installation of SDL3_ttf for True type fonts
+3. Installation of SDL3_image for image use
+
+This is written asuming that you will install these libuarys consecutively
+
+1. Installation of SDL3
+
+1.1 Create a working directory witch will be your project directory and go in it.
+
+1.2 Download source of SDL3 by cloning the Github Repository
+git clone https://github.com/libsdl-org/SDL
+
+1.3 Go in to the SDL folder resulting from the git clone
+
+1.4 Install all nececarry Dependencys using apt:
+
+sudo apt-get install build-essential git make \
+pkg-config cmake ninja-build gnome-desktop-testing libasound2-dev libpulse-dev \
+libaudio-dev libjack-dev libsndio-dev libx11-dev libxext-dev \
+libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev \
+libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev \
+libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libwayland-dev libx11-dev
+
+you can find an updated list of dependencys here:
+https://github.com/libsdl-org/SDL/blob/main/docs/README-linux.md#build-dependencies
+if you use the dependency list from github note that you may also need to install
+ libwayland-dev libx11-dev seperatly:
+ sudo apt isntall libwayland-dev libx11-dev
+
+
+1.5 create a build directory (in the SDL folder mentioned in step 1.3)
+mkdir build
+
+1.6 Go in to the build directory you created and runn cmake ..
+cmake ..
+(Note that the ".." after cmake are important as they represent the directory abvoe containing the SDL source)
+
+(if an error occurs it will most likely tell you that a dependency or libuary is missing, isntall the packege
+ using apt then delete the build directory and make a new build directory and runn make .. again)
+ you should now have a "Makefile" in your directory (among other things)
+
+1.7 Runn make: #i being the number of cores being used for the build (or just runn make) see comand:
+make -j i
+
+you should now have a shared libuary object in your directory "libSDL3.so.<version>"
+
+1.8 Install the libuary using make install:
+sudo make install libSDL3.so.0.3.0
+
+1.9 Update the libuarys using ldconfig:
+sudo ldconfig
+
+
+You have now installed SDL3, you can test it with a simple example:
+http://wiki.libsdl.org/SDL3/SDL_CreateWindow
+
+To compile code using the SDL libuary, put it in the working direktory (where the SDL folder is) and
+compile it with
+
+C++:
+g++ main.cpp -o Test.out -L./SDL/build -lSDL3
+
+GCC:
+gcc main.c -o Test.out -L./SDL/build -lSDL3
+
+(including the libuary using the path) (-lSDL3 is -l compiler automaticaly adds prefix and looks for .so file)
+
+
+
+
+
+2. Installation of SDL3_ttf for True type fonts
+
+If you want to use True fonts and usefull text features with your SDL3 Project you wil need SDL3_ttf
+To install it in your project (asuming you have taken the steps mentioned in 1):
+
+2.1 Clone the source reposetory (in working directory):
+git clone --recurse-submodules -j4 https://github.com/libsdl-org/SDL_ttf.git
+
+you should now have a SDL_ttf directory
+
+2.2 Go in to the SDL_ttf directory and create a directory called build, and enter it:
+cd SDL_ttf
+mkdir build
+cd build
+
+2.3 Install the extra dependencys:
+sudo apt install libfreetype-dev
+
+2.4 runn cmake ..
+cmake ..
+(Note that the .. is important as it represents the git clone directory)
+
+you should now have a "Makefile" in your directory (among other things)
+
+2.5 Runn make
+make
+
+(this may take a view minutes)
+
+you should now have a libSDL3_ttf.so.0.3.0 object in your directory
+(is a shared libuary)
+
+2.6 Install the libuary using make install:
+sudo make install libSDL3_ttf.so.0.3.0
+
+2.7 update the libuarys using ldconfig:
+sudo ldconfig
+
+You have now installed the SDL3_ttf libuary, you can test it with examples you can find in the
+git repository. to compile put the in the working direktory (the one containing the SDL and SDL_ttf folder)
+and compile using:
+
+C++:
+g++ Test.cpp -o Test.out -L./SDL_ttf/build -lSDL3_ttf -L./SDL/build -lSDL3
+
+GCC:
+gcc Test.cpp -o Test.out -L./SDL_ttf/build -lSDL3_ttf -L./SDL/build -lSDL3
+
+
+Tipp you will need fonts for using SDL_ttf (as .ttf files), you can find fonts here:
+https://www.1001freefonts.com/
+
+
+
+
+This is some information on how to properly uses this text box example
+
+(must be runn in folder above this one)
+
+1. You need to habe SDL3 and SDL3_ttf installed and must link it with your project
+compiler command:
+gcc showfont.c -o Test.out -L./SDL_ttf/build -lSDL3_ttf -L./SDL/build -lSDL3
+
+2. you need a ttf font file so a font can be rendered, you can find free ttf fonts here:
+https://www.1001freefonts.com/
+
+3. when running the programm you must give the font.ttf file and pointsize as arguments
+Example:
+./Test.out orbitron/Orbitron-Bold.ttf 15
+you can change the Text Alingment by pressing a
+
+Note the code is free, you can use it in your project
+
+
+
+
+3. Installation of SDL3_image for image use
+
+If you want to use immage formats outside of bitmap in your SDL3 project you need SDL3_image,
+to install:
+
+3.1 clone the repository (in a working directory)
+git clone --recurse-submodules -j4 https://github.com/libsdl-org/SDL_image.git
+
+you should now have a SDL_image directory
+
+3.2 Go in to the SDL_image directory and create a build directory, and go in it
+cd SDL_image
+mkdir build
+cd build
+
+3.3 Runn cmake ..
+cmake ..
+(Note tht the .. is important as it represents the directory above)
+
+you should now have a "Makefile" in your directory
+
+3.4 Runn make
+make
+
+you should now have a libSDL3_image.so.0.3.0 object in your directory
+(is a shared libuary)
+
+3.5 Install the Libuary using make install
+sudo make install libSDL3_image.so.0.3.0
+
+3.6 Update the libuarys using ldconfig
+sudo ldconfig
+
+You have now installed SDL3_image, to compile with SDL3_ttf and SDL3, use:
+
+C++:
+g++ Test.c -o Test.out -L./SDL_ttf/build -lSDL3_ttf -L./SDL/build -lSDL3 -L./SDL_image/build -lSDL3_image
+
+GCC:
+gcc Test.c -o Test.out -L./SDL_ttf/build -lSDL3_ttf -L./SDL/build -lSDL3 -L./SDL_image/build -lSDL3_image
+
+
+
+// End
